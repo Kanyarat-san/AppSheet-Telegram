@@ -1,1 +1,35 @@
+//Appsheet2Line-ปัญหาเครื่องจักรPcg//
 
+
+function getImgURL(path) {
+  let arrpath = path.split("/");
+  let foldername = arrpath[0];
+  let filename = arrpath[1];
+  let fileId = DriveApp.getFoldersByName(foldername).next().getFilesByName(filename).next().getId();
+  let fileURL = "https://drive.google.com/uc?id=" + fileId;
+  return fileURL;
+}
+
+function lineNoti(msg, img) {
+  let token = "Fzz5sIWLJieoz64sgQgxMg9qb7qqpUyPjtlseA3by6c";
+
+  let formData = {
+    'message': msg,
+    'imageThumbnail': img,
+    'imageFullsize': img
+  };
+
+  let options = {
+    "method": "post",
+    "payload": formData,
+    "headers": { "Authorization": "Bearer " + token }
+  }
+
+  UrlFetchApp.fetch("https://notify-api.line.me/api/notify", options);
+}
+
+function alert(content,รูปภาพ) {
+  let bfURL = getImgURL(รูปภาพ);
+  //Logger.log(bfURL);
+  lineNoti(content, bfURL);
+}
